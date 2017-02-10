@@ -48,8 +48,8 @@ public class ScrollableLayout extends RelativeLayout implements View.OnClickList
             @Override
             public void run() {
                 linearLayout  = (LinearLayout) getChildAt(0);
-                TextView re = (TextView) linearLayout.getChildAt(0);
-                LayoutParams params = new LayoutParams(re.getWidth(),re.getHeight());
+                View view = linearLayout.getChildAt(0);
+                LayoutParams params = new LayoutParams(view.getWidth(),view.getHeight());
                 params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM,RelativeLayout.TRUE);
                 params.addRule(RelativeLayout.ALIGN_PARENT_LEFT,RelativeLayout.TRUE);
                 addView(slideView,params);
@@ -60,14 +60,14 @@ public class ScrollableLayout extends RelativeLayout implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        int newPos = 0;
-        for (int i=1;i<linearLayout.getChildCount();i++){
+        int newPos = -1;
+        for (int i=0;i<linearLayout.getChildCount();i++){
             if ( linearLayout.getChildAt(i) == v ){
                 newPos = i;
             }
         }
-        if ( newPos !=lastPos && newPos!=0 ){
-            slideView.animate().translationXBy( (newPos-lastPos)*slideView.getWidth()).setDuration(500);
+        if ( newPos !=lastPos && newPos!=-1 ){
+            slideView.animate().translationX(linearLayout.getChildAt(newPos).getX());
             if ( onItemClicked!= null ){
                 onItemClicked.onClick(v.getId());
             }
